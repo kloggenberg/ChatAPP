@@ -34,7 +34,7 @@ public class Client {
             while (true) {
                 System.out.print("Enter message to send (type 'exit' to quit): ");
                 userInput = scanner.nextLine();
-                if (userInput.equalsIgnoreCase("exit")) {
+                if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     break;
                 }
                 writer.write(userInput + "\n");
