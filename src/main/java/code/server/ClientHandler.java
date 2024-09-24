@@ -18,24 +18,18 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
-            // Ask for client name
-            writer.write("Please enter your name: ");
-            writer.flush();
+            // First message is the client's name
             this.clientName = reader.readLine();
-            Server.broadcast(clientName + " has joined the chat.");
 
             String message;
             while ((message = reader.readLine()) != null) {
-                System.out.println(clientName + ": " + message);
                 // Broadcast message to other clients
-                Server.broadcast(clientName + ": " + message);
+                Server.broadcast(message, clientName);
             }
         } catch (IOException e) {
             System.out.println("Error with client: " + e.getMessage());
         } finally {
-            System.out.println(clientName + " has disconnected.");
             close();
-            Server.broadcast(clientName + " has left the chat.");
         }
     }
 
