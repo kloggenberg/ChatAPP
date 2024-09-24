@@ -21,13 +21,19 @@ public class Client {
                 String serverMessage;
                 try {
                     while ((serverMessage = reader.readLine()) != null) {
-                        System.out.println("Server: " + serverMessage);
+                        System.out.println(serverMessage);
                     }
                 } catch (IOException e) {
                     System.out.println("Error reading from server: " + e.getMessage());
                 }
             });
             readThread.start();
+
+            // Ask the client for a name
+            System.out.print("Enter your name: ");
+            String clientName = scanner.nextLine();
+            writer.write(clientName + "\n");
+            writer.flush();
 
             // Thread to send messages to the server
             String userInput;
