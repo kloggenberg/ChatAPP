@@ -14,17 +14,21 @@ public class Client {
              BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
              Scanner scanner = new Scanner(System.in)) {
 
-            System.out.println("Client connected to the server.");
+            System.out.println("=================================");
+            System.out.println("  Connected to the chat server   ");
+            System.out.println("=================================");
 
             // Thread to read messages from the server
             Thread readThread = new Thread(() -> {
                 String serverMessage;
                 try {
                     while ((serverMessage = reader.readLine()) != null) {
-                        System.out.println(serverMessage);
+                        // Format server messages distinctly
+                        System.out.println("\n[SERVER] " + serverMessage);
+                        System.out.print("> ");  // Indicate user can type a message
                     }
                 } catch (IOException e) {
-                    System.out.println("Error reading from server: " + e.getMessage());
+                    System.out.println("[ERROR] Error reading from server: " + e.getMessage());
                 }
             });
             readThread.start();
@@ -35,10 +39,10 @@ public class Client {
             writer.write(clientName + "\n");
             writer.flush();
 
-            // Thread to send messages to the server
+            // Send messages to the server
             String userInput;
             while (true) {
-                System.out.print("Enter message to send (type 'exit' to quit): ");
+                System.out.print("> ");  // Prompt for user input
                 userInput = scanner.nextLine();
                 if (userInput.equalsIgnoreCase("exit") || userInput.equalsIgnoreCase("quit")) {
                     break;
@@ -47,10 +51,10 @@ public class Client {
                 writer.flush();
             }
 
-            System.out.println("Client disconnected.");
+            System.out.println("[INFO] You have left the chat.");
 
         } catch (IOException e) {
-            System.out.println("Client error: " + e.getMessage());
+            System.out.println("[ERROR] Client error: " + e.getMessage());
         }
     }
 }
