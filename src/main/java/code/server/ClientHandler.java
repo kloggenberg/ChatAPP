@@ -7,7 +7,7 @@ public class ClientHandler implements Runnable {
     private Socket clientSocket;
     private BufferedReader reader;
     private BufferedWriter writer;
-    private static PrintWriter logWriter = new PrintWriter(System.out, true); // For logging messages (optional)
+    private String clientName;
 
     public ClientHandler(Socket socket) throws IOException {
         this.clientSocket = socket;
@@ -17,17 +17,25 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        String message;
         try {
+            // Ask for client name
+            writer.write("Please enter your name: ");
+            writer.flush();
+            this.clientName = reader.readLine();
+            Server.broadcast(clientName + " has joined the chat.");
+
+            String message;
             while ((message = reader.readLine()) != null) {
-                System.out.println("Message from client: " + message);
-                // Broadcast message to other clients or process it
-                Server.broadcast(message);
+                System.out.println(clientName + ": " + message);
+                // Broadcast message to other clients
+                Server.broadcast(clientName + ": " + message);
             }
         } catch (IOException e) {
             System.out.println("Error with client: " + e.getMessage());
         } finally {
+            System.out.println(clientName + " has disconnected.");
             close();
+            Server.broadcast(clientName + " has left the chat.");
         }
     }
 
