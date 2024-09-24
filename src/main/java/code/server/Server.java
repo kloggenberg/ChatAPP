@@ -79,6 +79,7 @@ public class Server {
 
     private synchronized static void shutdown() throws IOException {
         running = false;
+        broadcast("Server is shutting down.");
         for (ClientHandler client : clients) {
             client.close();
         }
